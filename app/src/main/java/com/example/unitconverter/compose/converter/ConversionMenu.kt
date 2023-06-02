@@ -1,4 +1,4 @@
-package com.example.unitconverter.compose
+package com.example.unitconverter.compose.converter
 
 import android.util.Log
 import androidx.compose.foundation.clickable
@@ -13,27 +13,22 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.modifier.modifierLocalOf
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
-import com.example.unitconverter.Conversion
-import kotlin.math.exp
+import com.example.unitconverter.data.Conversion
 
 @Composable
 fun ConversionMenu(
@@ -65,6 +60,10 @@ fun ConversionMenu(
                 Icon(icon, contentDescription = "icon",
                     modifier.clickable { expanded = !expanded })
             },
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.White,
+                focusedContainerColor = Color.White,
+            ),
             readOnly = true
         )
 

@@ -3,21 +3,22 @@ package com.example.unitconverter
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModelProvider
 import com.example.unitconverter.compose.BaseScreen
-import com.example.unitconverter.ui.theme.UnitConverterTheme
+import com.example.unitconverter.data.ConverterDB
+import com.example.unitconverter.data.ConverterRepositoryImpl
 
 class MainActivity : ComponentActivity() {
+    private lateinit var viewModel: ConverterViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val dao = ConverterDB.getInstance(application).converterDao
+        val repository = ConverterRepositoryImpl(dao)
+        val factory = ConverterViewModelFactory(repository)
+        viewModel = ViewModelProvider(this,factory)[ConverterViewModel::class.java]
+
         setContent {
-            BaseScreen()
+            BaseScreen(converterViewModel=viewModel)
         }
     }
 }

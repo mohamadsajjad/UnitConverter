@@ -1,4 +1,4 @@
-package com.example.unitconverter.compose
+package com.example.unitconverter.compose.converter
 
 import android.util.Log
 import androidx.compose.foundation.clickable
@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ResultBlock(
-    convertedTo: String,
+    convertedTo: String?,
     result: String,
     snackbarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope,
@@ -46,13 +46,16 @@ fun ResultBlock(
 
     val clipboardManager = LocalClipboardManager.current
     val textFieldLabel = buildAnnotatedString {
-        append("Conversion result (")
-        withStyle(
-            style = SpanStyle(fontWeight = FontWeight.Bold)
-        ) {
-            append(convertedTo)
+        append("Conversion result")
+        convertedTo?.let {
+            append(" (")
+            withStyle(
+                style = SpanStyle(fontWeight = FontWeight.Bold)
+            ) {
+                append(it)
+            }
+            append(")")
         }
-        append(")")
     }
 
     OutlinedTextField(
@@ -70,16 +73,17 @@ fun ResultBlock(
             focusedContainerColor = Color.White,
         ),
         trailingIcon = {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_content_copy_24),
-                contentDescription = "copy icon",
-                modifier.clickable {
-                    coroutineScope.launch {
-                        clipboardManager.setText(AnnotatedString(result))
-                        snackbarHostState.showSnackbar(message = "Copied to clipboard.")
+            if (result.isNotEmpty())
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_content_copy_24),
+                    contentDescription = "copy icon",
+                    modifier.clickable {
+                        coroutineScope.launch {
+                            clipboardManager.setText(AnnotatedString(result))
+                            snackbarHostState.showSnackbar(message = "Copied to clipboard.")
+                        }
                     }
-                }
-            )
+                )
         },
         readOnly = true
     )
